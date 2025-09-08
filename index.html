@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Digital Hug Dispenser 💖</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>💖</text></svg>">
+    <style>
+        :root {
+            /* Default Pink Love theme (light baby pink) */
+            --bg: #ffe0ef; /* Light baby pink */
+            --panel: #ffffff;
+            --accent: #ff7eb6;
+            --accent-2: #ffb3d1;
+            --ink: #391e2b;
+            --muted: #7a5667;
+            --success: #32d296;
+            --warn: #ffcf33;
+            --radius: 22px;
+            --shadow: 0 10px 25px rgba(0, 0, 0, .08);
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        html, body {
+            height: 100%
+        }
+
+        body {
+            margin: 0;
+            font-family: ui-rounded, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", "Comic Sans MS", sans-serif;
+            background: radial-gradient(1200px 800px at 10% -10%, #ffe6f3 0%, transparent 40%),
+                radial-gradient(1000px 700px at 110% 0%, #e6fff6 0%, transparent 40%),
+                var(--bg);
+            color: var(--ink);
+            transition: all .6s ease;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center center;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            backdrop-filter: saturate(1.2) blur(6px);
+            background: rgba(255, 255, 255, .75);
+            border-bottom: 1px solid #f3d7e6;
+            transition: all .6s ease;
+        }
+
+        .wrap {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 16px 20px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 800;
+            letter-spacing: .2px
+        }
+
+        .brand .logo {
+            width: 40px;
+            height: 40px;
+            display: grid;
+            place-items: center;
+            background: var(--accent);
+            color: #fff;
+            border-radius: 14px;
+            box-shadow: var(--shadow);
+            transition: all .6s ease;
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 12px
+        }
+
+        .tab {
+            appearance: none;
+            border: 0;
+            cursor: pointer;
+            padding: 10px 14px;
+            border-radius: 16px;
+            background: var(--panel);
+            box-shadow: var(--shadow);
+            color: var(--ink);
+            font-weight: 650;
+            transition: all .2s ease;
+        }
+
+        .tab:hover {
+            transform: translateY(-1px)
+        }
+
+        .tab.active {
+            background: linear-gradient(145deg, var(--accent), var(--accent-2));
+            color: #fff
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 22px auto;
+            padding: 0 20px 80px
+        }
+
+        section.panel {
+            display: none;
+            background: var(--panel);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 24px;
+            animation: fadeIn .25s ease;
+            transition: all .6s ease;
+        }
+
+        section.panel.active {
+            display: block
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(6px)
+            }
+            to {
+                opacity: 1;
+                transform: none
+            }
+        }
+
+        h1, h2 {
+            margin: .2em 0 .4em
+        }
+
+        h1 {
+            font-size: clamp(26px, 3.5vw, 36px)
+        }
+
+        h2 {
+            font-size: clamp(20px, 3vw, 28px);
+            color: var(--muted)
+        }
+
+        .btn {
+            appearance: none;
+            border: 0;
+            background: linear-gradient(145deg, var(--accent), var(--accent-2));
+            color: #fff;
+            padding: 14px 18px;
+            border-radius: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            transition: all .6s ease;
+        }
+
+        .btn.secondary {
+            background: #f3e7ee;
+            color: #5b3d4f
+        }
+
+        .btn.ghost {
+            background: transparent;
+            border: 2px solid var(--accent);
+            color: var(--accent)
+        }
+
+        .grid {
+            display: grid;
+            gap: 16px
+        }
+
+        .cols-2 {
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr))
+        }
+
+        /* Hug card */
+        .hug-card {
+            display: grid;
+            justify-items: center;
+            text-align: center;
+            gap: 12px
+        }
+
+        .hug-card img {
+            max-width: min(340px, 90%);
+            border-radius: 18px;
+            transition: all .6s ease;
+        }
+
+        .meta {
+            color: var(--muted);
+            font-size: .95rem;
+            transition: all .6s ease;
+        }
+
+        /* Mood buttons */
+        .moods {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px
+        }
+
+        .mood {
+            padding: 12px 14px;
+            border-radius: 16px;
+            background: #ffe0ef;
+            border: 0;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all .6s ease;
+        }
+
+        .mood:hover {
+            filter: brightness(1.02)
+        }
+
+        /* Polaroid wall */
+        .polaroids {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 18px
+        }
+
+        .polaroid {
+            background: #fff;
+            padding: 10px 10px 16px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .1);
+            transform: rotate(var(--r));
+            transition: all .6s ease;
+        }
+
+        .polaroid img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 8px
+        }
+
+        .polaroid .cap {
+            margin-top: 10px;
+            font-size: .95rem;
+            color: #69455b;
+            transition: all .6s ease;
+        }
+
+        /* Secret */
+        .secret-box {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap
+        }
+
+        input[type="password"], input[type="text"] {
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: 1.5px solid #f0cfe2;
+            outline: none;
+            transition: all .6s ease;
+        }
+
+        /* Streak */
+        .streak-stat {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap
+        }
+
+        .pill {
+            background: #ffe3f2;
+            padding: 10px 14px;
+            border-radius: 999px;
+            font-weight: 700;
+            transition: all .6s ease;
+        }
+
+        /* Footer player + hearts */
+        footer.player {
+            position: fixed;
+            bottom: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #fff;
+            border-radius: 999px;
+            padding: 8px 12px;
+            box-shadow: var(--shadow);
+            transition: all .6s ease;
+        }
+
+        .hearts {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 22px;
+            animation: floatUp 4.5s linear forwards
+        }
+
+        @keyframes floatUp {
+            from {
+                transform: translateY(0) scale(.9);
+                opacity: 1
+            }
+            to {
+                transform: translateY(-120vh) scale(1.3);
+                opacity: 0
+            }
+        }
+
+        .muted {
+            opacity: .6
+        }
+
+        .tip {
+            color: var(--muted);
+            font-size: .95rem;
+            transition: all .6s ease;
+        }
+
+        .spacer {
+            height: 8px
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0
+        }
+
+        /* THEMES */
+        
+        /* Blue Theme (Light Cyan) */
+        body.blue-theme {
+            --bg: #cfe9ed; /* Slightly darker light cyan */
+            --panel: rgba(199, 230, 236, .92); /* Increased opacity for panel */
+            --accent: #4dd0e1; /* Cyan */
+            --accent-2: #80deea; /* Lighter Cyan */
+            --ink: #263238; /* Dark Grey Blue */
+            --muted: #546e7a; /* Grey Blue */
+            --shadow: 0 10px 25px rgba(0, 0, 0, .15);
+            background: radial-gradient(1200px 800px at 10% -10%, #d8edf1 0%, transparent 40%),
+                        radial-gradient(1000px 700px at 110% 0%, #d8f1e0 0%, transparent 40%),
+                        var(--bg);
+        }
+
+        body.blue-theme header {
+            background: rgba(199, 230, 236, .85); /* Increased opacity for header */
+            border-color: #b2ebf2;
+        }
+
+        body.blue-theme .brand .logo {
+            background: var(--accent);
+            color: #263238;
+        }
+
+        body.blue-theme .tab.active {
+            background: linear-gradient(145deg, var(--accent), var(--accent-2));
+            color: #263238;
+        }
+
+        body.blue-theme .mood {
+            background: #b2ebf2;
+            color: #263238;
+        }
+
+        body.blue-theme .pill {
+            background: #b2ebf2;
+            color: #263238;
+        }
+
+        body.blue-theme .polaroid {
+            background: rgba(178, 235, 242, .9); /* Increased opacity for polaroids */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .2);
+        }
+
+        body.blue-theme .polaroid .cap {
+            color: #4dd0e1;
+        }
+
+        body.blue-theme input[type="password"],
+        body.blue-theme input[type="text"] {
+            border: 1.5px solid #80deea;
+            background: rgba(178, 235, 242, .9);
+            color: #263238;
+        }
+
+        body.blue-theme footer.player {
+            background: var(--panel);
+            box-shadow: var(--shadow);
+        }
+        
+        .blue-theme .hearts {
+            display: none;
+        }
+
+        /* Yellow Theme */
+        body.yellow-theme {
+            --bg: #FFD700; /* Gold Yellow */
+            --panel: rgba(255, 236, 179, .85); /* Lighter Creamy Yellow with opacity */
+            --accent: #FFA000; /* Dark Orange */
+            --accent-2: #FFCA28; /* Amber Yellow */
+            --ink: #3E2723; /* Dark Brown */
+            --muted: #795548; /* Medium Brown */
+            --shadow: 0 10px 25px rgba(0, 0, 0, .15);
+            background: radial-gradient(1200px 800px at 10% -10%, #fff9e6 0%, transparent 40%),
+                        radial-gradient(1000px 700px at 110% 0%, #fff9e0 0%, transparent 40%),
+                        var(--bg);
+        }
+
+        body.yellow-theme header {
+            background: rgba(255, 236, 179, .75);
+            border-color: #FFC107;
+        }
+
+        body.yellow-theme .brand .logo {
+            background: var(--accent);
+            color: #3E2723;
+        }
+
+        body.yellow-theme .tab.active {
+            background: linear-gradient(145deg, var(--accent), var(--accent-2));
+            color: #3E2723;
+        }
+
+        body.yellow-theme .mood {
+            background: #FFECB3;
+            color: #3E2723;
+        }
+
+        body.yellow-theme .pill {
+            background: #FFECB3;
+            color: #3E2723;
+        }
+
+        body.yellow-theme .polaroid {
+            background: rgba(255, 248, 225, .8);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .18);
+        }
+
+        body.yellow-theme .polaroid .cap {
+            color: #5D4037;
+        }
+
+        body.yellow-theme input[type="password"],
+        body.yellow-theme input[type="text"] {
+            border: 1.5px solid #FFAB40;
+            background: rgba(255, 248, 225, .8);
+            color: #3E2723;
+        }
+
+        body.yellow-theme footer.player {
+            background: var(--panel);
+            box-shadow: var(--shadow);
+        }
+        
+        .yellow-theme .hearts {
+            display: none;
+        }
+
+        /* Green Theme */
+        body.green-theme {
+            --bg: #e0efe0; /* Slightly darker light green */
+            --panel: rgba(224, 239, 224, .92); /* Increased opacity for panel */
+            --accent: #66bb6a; /* Green */
+            --accent-2: #81c784; /* Lighter Green */
+            --ink: #2e7d32; /* Dark Green */
+            --muted: #4caf50; /* Medium Green */
+            --shadow: 0 10px 25px rgba(0, 0, 0, .12);
+            background: radial-gradient(1200px 800px at 10% -10%, #e6f3e6 0%, transparent 40%),
+                        radial-gradient(1000px 700px at 110% 0%, #e6f3e0 0%, transparent 40%),
+                        var(--bg);
+        }
+
+        body.green-theme header {
+            background: rgba(224, 239, 224, .85); /* Increased opacity for header */
+            border-color: #a5d6a7;
+        }
+
+        body.green-theme .brand .logo {
+            background: var(--accent);
+            color: #2e7d32;
+        }
+
+        body.green-theme .tab.active {
+            background: linear-gradient(145deg, var(--accent), var(--accent-2));
+            color: #2e7d32;
+        }
+
+        body.green-theme .mood {
+            background: #a5d6a7;
+            color: #2e7d32;
+        }
+
+        body.green-theme .pill {
+            background: #a5d6a7;
+            color: #2e7d32;
+        }
+
+        body.green-theme .polaroid {
+            background: rgba(165, 214, 167, .9); /* Increased opacity for polaroids */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .15);
+        }
+
+        body.green-theme .polaroid .cap {
+            color: #66bb6a;
+        }
+
+        body.green-theme input[type="password"],
+        body.green-theme input[type="text"] {
+            border: 1.5px solid #81c784;
+            background: rgba(165, 214, 167, .9);
+            color: #2e7d32;
+        }
+
+        body.green-theme footer.player {
+            background: var(--panel);
+            box-shadow: var(--shadow);
+        }
+        
+        .green-theme .hearts {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="wrap">
+            <div class="brand">
+                <div class="logo">🤗</div> Digital Hug Dispenser
+            </div>
+            <nav id="nav">
+                <button class="tab active" data-target="home">Home</button>
+                <button class="tab" data-target="why">Why do you need a hug?</button>
+                <button class="tab" data-target="random">Random Hug</button>
+                <button class="tab" data-target="photos">Polaroid Wall</button>
+                <button class="tab" data-target="onthisday">On This Day</button>
+                <button class="tab" data-target="streaks">Hug Streaks</button>
+                <button class="tab" data-target="letter">A Letter From Me</button>
+                <button class="tab" data-target="secret">Secret Code</button>
+                <button class="tab" data-target="voice">Voice Hug</button>
+                <button class="tab" data-target="special">Special Days</button>
+                <button class="tab" data-target="compliments">Compliment Jar</button>
+                <button class="tab" data-target="countdown">Countdown</button>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="home" class="panel active">
+            <h1>Hey love, need a hug? 🧸💞</h1>
+            <p class="meta">Tap any section above, or try a quick one:</p>
+            <div class="grid cols-2">
+                <div class="hug-card">
+                    <button class="btn" id="quick-hug">Tap for a quick hug 🤗</button>
+                    <div id="quick-hug-result" class="meta"></div>
+                </div>
+                <div>
+                    <p class="tip">Pro tip: This site saves your <strong>hug streak</strong> on your device. Come back tomorrow and keep it going! 🔥</p>
+                    <div class="spacer"></div>
+                    <button class="btn secondary" id="theme-toggle-btn">Theme: Pink Love ✨</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="why" class="panel">
+            <h1>Why do you need a hug, my love? 💗</h1>
+            <div class="moods">
+                <button class="mood" data-mood="sad">Feeling Sad 😔</button>
+                <button class="mood" data-mood="tired">Tired 😴</button>
+                <button class="mood" data-mood="stressed">Stressed 😩</button>
+                <button class="mood" data-mood="miss">Miss You 😢</button>
+                <button class="mood" data-mood="love">Just Need Love 🥺</button>
+            </div>
+            <div class="spacer"></div>
+            <div id="mood-result" class="hug-card"></div>
+        </section>
+
+        <section id="random" class="panel">
+            <h1>Random Hug 🎲</h1>
+            <button class="btn" id="random-btn">Give me a surprise hug!</button>
+            <div class="spacer"></div>
+            <div id="random-result" class="hug-card"></div>
+        </section>
+
+        <section id="photos" class="panel">
+            <h1>Our Polaroid Wall 📷</h1>
+            <p class="meta">(Replace these images with your own in <code>assets/images</code> and update captions in the JS data.)</p>
+            <div id="polaroids" class="polaroids"></div>
+        </section>
+
+        <section id="onthisday" class="panel">
+            <h1>On This Day 📅</h1>
+            <div id="otd" class="hug-card"></div>
+        </section>
+
+        <section id="streaks" class="panel">
+            <h1>Your Hug Streaks 🔥</h1>
+            <div class="streak-stat">
+                <div class="pill">Current streak: <span id="streak">0</span> days</div>
+                <div class="pill">Total hugs received: <span id="total-hugs">0</span></div>
+                <div class="pill">Last visit: <span id="last-visit">—</span></div>
+            </div>
+            <p class="tip">Streaks are saved locally on your device. Come back daily to keep the fire going! 🔥</p>
+        </section>
+
+        <section id="letter" class="panel">
+            <h1>From Me to You 💌</h1>
+            <div class="grid cols-2">
+                <div>
+                    <p>
+                        My favorite person,
+                        <br><br>
+                        You are the softest part of my day and the bravest part of my heart. When things feel heavy, remember:
+                        you don’t have to carry them alone. I’m here today, tomorrow, always.
+                        <br><br>
+                        Love you more than all the extra fries we “didn’t order” 🍟💖
+                    </p>
+                </div>
+                <div class="hug-card">
+                    <img id="letter-gif" alt="hug gif" />
+                    <div class="meta">(This page picks a random cozy gif each time.)</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="secret" class="panel">
+            <h1>Only You Can Open This 🔐</h1>
+            <div class="secret-box">
+                <input id="secret-input" type="password" placeholder="Enter our secret word" />
+                <button class="btn" id="secret-btn">Unlock</button>
+            </div>
+            <div class="spacer"></div>
+            <div id="secret-content" class="hug-card" style="display:none"></div>
+            <div id="secret-hint" class="tip"></div>
+        </section>
+
+        <section id="voice" class="panel">
+            <h1>Voice Hug 🎙️</h1>
+            <p class="meta">Press play to hear a tiny message from me.</p>
+            <audio id="voice-audio" controls preload="auto"></audio>
+        </section>
+
+        <section id="special" class="panel">
+            <h1>Special Day Surprise 🎉</h1>
+            <div id="special-box" class="hug-card"></div>
+            <p class="tip">Configure your birthday/anniversary dates in the JS data ✨</p>
+        </section>
+
+        <section id="compliments" class="panel">
+            <h1>Jar of Compliments 💌</h1>
+            <div class="hug-card">
+                <button class="btn" id="compliment-btn">Compliment Me! ✨</button>
+                <div id="compliment-result" class="meta" style="min-height:2em;"></div>
+            </div>
+        </section>
+
+        <section id="countdown" class="panel">
+            <h1>Special Day Countdowns 🎉</h1>
+            <p class="meta">Counting down the days until...</p>
+            <div id="countdown-list"></div>
+        </section>
+    </main>
+
+    <div class="hearts" id="hearts"></div>
+    <div class="stars"></div>
+
+    <footer class="player" aria-label="background music controls">
+        <button class="btn secondary" id="music-toggle">Play music 🎵</button>
+        <span id="music-status" class="meta muted">soft piano ready</span>
+        <button class="btn secondary" id="music-skip">Skip ⏭️</button>
+    </footer>
+
+    <script>
+        /***********************************
+         * CONFIG: Paths & Data
+         ***********************************/
+        const ASSETS = {
+            gifsBase: "D:/Personal/Anniversary/assets/gifs",
+            imagesBase: "D:/Personal/Anniversary/assets/images",
+            audioBase: "D:/Personal/Anniversary/assets/audios"
+        };
+
+        // Mood-based hug packs
+        const HUGS = {
+            sad: {
+                messages: [
+                    "It’s okay to cry sometimes. I’m hugging you extra tight today 💞",
+                    "You’re stronger than you think — and I’m right here with you 🐻",
+                    "I’m proud of you for getting through tough days. One hug at a time 🤍"
+                ],
+                gifs: ["hug1.gif", "hug2.gif", "hug3.gif"]
+            },
+            tired: {
+                messages: [
+                    "Come rest in my arms for a bit 😴💗",
+                    "You’ve done enough for today. Let me hold you 💕",
+                    "Close your eyes, breathe, I’ve got you 🌙"
+                ],
+                gifs: ["hug3.gif", "hug4.gif"]
+            },
+            stressed: {
+                messages: [
+                    "Breathe in… and let my hug melt the stress away 😌",
+                    "You're more capable than you realize 💖",
+                    "One step at a time. I’m with you ✨"
+                ],
+                gifs: ["hug5.gif", "hug6.gif"]
+            },
+            miss: {
+                messages: [
+                    "I miss you too. Here's a hug until I can give a real one 🥺💓",
+                    "Counting the days until I can hold you again 🤗",
+                    "Distance is temporary. Us? Forever. 💘"
+                ],
+                gifs: ["hug7.gif", "hug8.gif"]
+            },
+            love: {
+                messages: [
+                    "I love you so much. Never forget it 💘",
+                    "You’re the reason hugs exist 😚",
+                    "Your smile is my favorite notification 💌"
+                ],
+                gifs: ["hug9.gif", "hug10.gif", "hug11.gif", "hug12.gif", "hug13.gif"]
+            }
+        };
+
+        // Pool for random hug mode (merge of all moods)
+        const allGifs = Array.from({length: 13}, (_, i) => `hug${i + 1}.gif`);
+        const GENERAL_HUGS = {
+            messages: Object.values(HUGS).flatMap(v => v.messages),
+            gifs: allGifs
+        };
+
+        // Polaroids (replace with your images & captions)
+        const POLAROIDS = [{
+            src: 'pic1.jpg',
+        
+        }, {
+            src: 'pic2.jpg',
+            
+        }, {
+            src: 'pic3.jpg',
+            
+        }, {
+            src: 'pic4.jpg',
+            
+        }];
+
+        // On This Day memories (MM-DD)
+        const MEMORIES = [{
+            date: '01-14',
+            text: 'We discovered the best fries of our lives 🍟'
+        }, {
+            date: '02-22',
+            text: 'You sang that song and I fell in love again 🎶'
+        }, {
+            date: '07-09',
+            text: 'Late-night walk + star counting ✨'
+        }, {
+            date: '09-06',
+            text: 'Coding the Hug Dispenser together 😍'
+        }];
+
+        // Quotes (used here instead of an external API for simplicity)
+        const QUOTES = [
+            '"I love you" means that I will love you and stand by you even through the worst of times. — Unknown',
+            'Grow old with me, the best is yet to be. — Browning',
+            'In a sea of people, my eyes will always search for you. — Unknown',
+            'You are my today and all of my tomorrows. — Lee'
+        ];
+
+        // Secret codes → special content
+        const SECRET = {
+            validCodes: ['pookie', 'ourspecialword', '22'],
+            content: `
+            <h2>Unlocked 💗</h2>
+            <p>You found the secret page. So here’s a promise: No matter how hard the day gets, I will always be your soft place to land.</p>
+            <p class="meta">(psst… check Random Hug for a bonus!)</p>
+            `,
+            hint: 'Hint: Our inside joke. All lowercase. 😉'
+        };
+
+        // Special days (MM-DD)
+        const SPECIAL = {
+            '10-03': {
+                title: 'Happy 22! 🎂',
+                text: 'Feeling 22 — and I love you like Taylor meant it 💖',
+                confetti: true
+            },
+            '02-14': {
+                title: 'Valentine’s Hug 🌹',
+                text: 'Every day is Valentine’s with you.'
+            },
+            '12-31': {
+                title: 'Year Wrap 🥳',
+                text: 'Thank you for being my favorite part of this year.'
+            }
+        };
+
+        // Audio
+        const AUDIO = {
+            bg: [
+                'bgmusic1.mp3',
+                'bgmusic2.mp3',
+                'bgmusic3.mp3',
+                'bgmusic4.mp3',
+                'bgmusic5.mp3',
+                'bgmusic6.mp3',
+                'bgmusic7.mp3'
+            ],
+            voice: 'voicehug.mp3'
+        };
+
+        // Compliments
+        const COMPLIMENTS = [
+            "You're the cutest human alive.",
+            "I'm so lucky you're mine.",
+            "You light up my life, babe.",
+            "Your smile is my favorite thing.",
+            "I love you more than words can say."
+        ];
+
+        // Countdowns
+        const COUNTDOWNS = [{
+            name: 'Your Birthday',
+            date: '2025-10-03'
+        }, {
+            name: 'Our Anniversary',
+            date: '2026-02-22'
+        }, {
+            name: 'Next time we meet',
+            date: '2026-03-15'
+        }];
+
+        /***********************************
+         * Utilities
+         ***********************************/
+        const $ = sel => document.querySelector(sel);
+        const $$ = sel => Array.from(document.querySelectorAll(sel));
+
+        function pick(arr) {
+            return arr[Math.floor(Math.random() * arr.length)]
+        }
+
+        function todayMD() {
+            const d = new Date();
+            const mm = String(d.getMonth() + 1).padStart(2, '0');
+            const dd = String(d.getDate()).padStart(2, '0');
+            return `${mm}-${dd}`
+        }
+
+        function renderHug(containerId, message, gifFile) {
+            const el = document.getElementById(containerId);
+            el.innerHTML = `
+            <div class="hug-card">
+                <div class="meta">${message}</div>
+                <img src="${ASSETS.gifsBase + gifFile}" alt="hug gif" />
+            </div>
+            `;
+            bumpHugCounters();
+            burstHearts();
+        }
+
+        /***********************************
+         * Navigation
+         ***********************************/
+        function showSection(id) {
+            $$('.tab').forEach(t => t.classList.toggle('active', t.dataset.target === id));
+            $$('.panel').forEach(p => p.classList.toggle('active', p.id === id));
+            // lazy init per section
+            if (id === 'photos') initPolaroids();
+            if (id === 'onthisday') renderOnThisDay();
+            if (id === 'streaks') renderStreaks();
+            if (id === 'letter') $('#letter-gif').src = ASSETS.gifsBase + pick(GENERAL_HUGS.gifs);
+            if (id === 'voice') initVoice();
+            if (id === 'special') renderSpecial();
+            if (id === 'countdown') startCountdowns();
+        }
+
+        /***********************************
+         * Hearts animation
+         ***********************************/
+        let heartsOn = true;
+
+        function burstHearts() {
+            if (!heartsOn) return;
+            const container = $('#hearts');
+            for (let i = 0; i < 6; i++) {
+                const span = document.createElement('span');
+                span.className = 'heart';
+                span.textContent = ['💖', '💗', '💞', '💓', '💝'][Math.floor(Math.random() * 5)];
+                span.style.left = Math.random() * 100 + 'vw';
+                span.style.bottom = '-20px';
+                span.style.animationDelay = (i * 0.1) + 's';
+                container.appendChild(span);
+                setTimeout(() => span.remove(), 5000);
+            }
+        }
+
+        /***********************************
+         * Streaks (localStorage)
+         ***********************************/
+        const LS_KEYS = {
+            LAST: 'hug:last',
+            STREAK: 'hug:streak',
+            COUNT: 'hug:count',
+            SECRET: 'hug:secret',
+            THEME: 'hug:theme'
+        };
+
+        function isConsecutiveDay(prevStr, curr) {
+            const prev = new Date(prevStr);
+            const diff = curr - prev; // ms
+            const days = diff / (1000 * 60 * 60 * 24);
+            return days > 0.5 && days < 1.5; // allow time drift
+        }
+
+        function bumpVisit() {
+            const now = new Date();
+            const last = localStorage.getItem(LS_KEYS.LAST);
+            let streak = Number(localStorage.getItem(LS_KEYS.STREAK) || 0);
+            if (!last) {
+                streak = 1;
+            } else {
+                const lastDate = new Date(last);
+                if (isConsecutiveDay(lastDate, now)) streak += 1;
+                else if (lastDate.toDateString() !== now.toDateString()) streak = 1; // break
+            }
+            localStorage.setItem(LS_KEYS.STREAK, String(streak));
+            localStorage.setItem(LS_KEYS.LAST, now.toISOString());
+        }
+
+        function bumpHugCounters() {
+            const count = Number(localStorage.getItem(LS_KEYS.COUNT) || 0) + 1;
+            localStorage.setItem(LS_KEYS.COUNT, String(count));
+            // Also mark a visit for streak on hug
+            bumpVisit();
+            renderStreaks();
+        }
+
+        function renderStreaks() {
+            const streak = Number(localStorage.getItem(LS_KEYS.STREAK) || 0);
+            const count = Number(localStorage.getItem(LS_KEYS.COUNT) || 0);
+            const last = localStorage.getItem(LS_KEYS.LAST);
+            $('#streak').textContent = String(streak);
+            $('#total-hugs').textContent = String(count);
+            $('#last-visit').textContent = last ? new Date(last).toDateString() : '—';
+        }
+
+        /***********************************
+         * Sections logic
+         ***********************************/
+        function hugByMood(mood) {
+            const pack = HUGS[mood] || HUGS.love;
+            renderHug('mood-result', pick(pack.messages), pick(pack.gifs));
+        }
+
+        function randomHug() {
+            renderHug('random-result', pick(GENERAL_HUGS.messages), pick(GENERAL_HUGS.gifs));
+        }
+
+        function quickHug() {
+            const msg = pick(GENERAL_HUGS.messages);
+            const gif = pick(GENERAL_HUGS.gifs);
+            $('#quick-hug-result').innerHTML = `<div class="meta">${msg}</div>`;
+            burstHearts();
+            bumpHugCounters();
+            // Also preview gif inline under the text
+            $('#quick-hug-result').insertAdjacentHTML('beforeend', `<div class="spacer"></div><img src="${ASSETS.gifsBase + gif}" alt="hug gif" style="max-width:220px;border-radius:14px">`);
+        }
+
+        function initPolaroids() {
+            const wall = $('#polaroids');
+            if (wall.dataset.rendered) return; // render once
+            wall.dataset.rendered = '1';
+            POLAROIDS.forEach((p, i) => {
+                const d = document.createElement('div');
+                d.className = 'polaroid';
+                d.style.setProperty('--r', (Math.random() * 6 - 3) + 'deg');
+                d.innerHTML = `<img src="${ASSETS.imagesBase + p.src}" alt="photo ${i + 1}"><div class='cap'>${p.cap}</div>`;
+                wall.appendChild(d);
+            });
+        }
+
+        function renderOnThisDay() {
+            const md = todayMD();
+            const mem = MEMORIES.find(m => m.date === md);
+            const quote = pick(QUOTES);
+            const box = $('#otd');
+            if (mem) {
+                box.innerHTML = `
+            <div class="meta">${mem.text}</div>
+            <div class="meta">Also, quote of the day:</div>
+            <div class="meta"><em>${quote}</em></div>
+            <img src="${ASSETS.gifsBase + pick(GENERAL_HUGS.gifs)}" alt="gif" />
+            `;
+            } else {
+                box.innerHTML = `
+            <div class="meta">No specific memory saved for today yet… but here's an extra cuddle 💞</div>
+            <div class="meta"><em>${quote}</em></div>
+            <img src="${ASSETS.gifsBase + pick(GENERAL_HUGS.gifs)}" alt="gif" />
+            `;
+            }
+        }
+
+        function secretUnlock() {
+            const code = ($('#secret-input').value || '').trim().toLowerCase();
+            const ok = SECRET.validCodes.includes(code);
+            if (ok) {
+                localStorage.setItem(LS_KEYS.SECRET, '1');
+                const box = $('#secret-content');
+                box.style.display = 'grid';
+                box.innerHTML = SECRET.content + `<img src="${ASSETS.gifsBase + pick(GENERAL_HUGS.gifs)}" alt="gif"/>`;
+                $('#secret-hint').textContent = '';
+                burstHearts();
+            } else {
+                $('#secret-hint').textContent = SECRET.hint;
+            }
+        }
+
+        function renderSpecial() {
+            const md = todayMD();
+            const s = SPECIAL[md];
+            const box = $('#special-box');
+            if (s) {
+                box.innerHTML = `
+            <h2>${s.title}</h2>
+            <div class="meta">${s.text}</div>
+            <img src="${ASSETS.gifsBase + pick(GENERAL_HUGS.gifs)}" alt="gif" />
+            `;
+                if (s.confetti) confetti();
+            } else {
+                box.innerHTML = `
+            <div class="meta">No special surprise today… but every day with you is special 💗</div>
+            <img src="${ASSETS.gifsBase + pick(GENERAL_HUGS.gifs)}" alt="gif" />
+            `;
+            }
+        }
+
+        // Compliments
+        function getCompliment() {
+            const result = $('#compliment-result');
+            result.textContent = pick(COMPLIMENTS);
+            burstHearts();
+        }
+
+        // Countdowns
+        function renderCountdowns() {
+            const container = $('#countdown-list');
+            container.innerHTML = '';
+            COUNTDOWNS.forEach(cd => {
+                const now = new Date();
+                let target = new Date(cd.date);
+                // If the target date is in the past, calculate for next year
+                if (target.getTime() < now.getTime() && (cd.date.includes('-') && !cd.date.includes(':'))) {
+                    target.setFullYear(now.getFullYear() + 1);
+                }
+                const diff = target - now;
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+                const item = document.createElement('div');
+                item.className = 'pill';
+                if (diff > 0) {
+                    item.innerHTML = `${cd.name}: <br> <strong>${days}</strong> days, <strong>${hours}</strong> hours, <strong>${minutes}</strong> minutes, <strong>${seconds}</strong> seconds`;
+                } else {
+                    item.innerHTML = `<strong>Today is ${cd.name}! 🎉</strong>`;
+                }
+                container.appendChild(item);
+            });
+        }
+        let countdownInterval = null;
+
+        function startCountdowns() {
+            if (countdownInterval) clearInterval(countdownInterval);
+            renderCountdowns();
+            countdownInterval = setInterval(renderCountdowns, 1000);
+        }
+
+        /***********************************
+         * Audio
+         ***********************************/
+        let bgAudio;
+        let musicPlaying = false;
+        let currentTrack = 0;
+
+        function ensureBg() {
+            if (!bgAudio) {
+                bgAudio = new Audio();
+                bgAudio.loop = true;
+                bgAudio.addEventListener('ended', () => {
+                    skipMusic();
+                });
+            }
+            return bgAudio;
+        }
+
+        function playMusic() {
+            const a = ensureBg();
+            a.src = ASSETS.audioBase + AUDIO.bg[currentTrack];
+            a.play();
+            musicPlaying = true;
+            $('#music-status').textContent = `playing: ${AUDIO.bg[currentTrack].replace('.mp3','')}`;
+            $('#music-toggle').textContent = 'Pause music ⏸️';
+        }
+
+        function pauseMusic() {
+            const a = ensureBg();
+            a.pause();
+            musicPlaying = false;
+            $('#music-status').textContent = 'paused';
+            $('#music-toggle').textContent = 'Play music 🎵';
+        }
+
+        function toggleMusic() {
+            if (!musicPlaying) {
+                playMusic();
+            } else {
+                pauseMusic();
+            }
+        }
+
+        function skipMusic() {
+            currentTrack = (currentTrack + 1) % AUDIO.bg.length;
+            if (musicPlaying) playMusic();
+        }
+
+        function initVoice() {
+            const el = $('#voice-audio');
+            if (!el.src) el.src = ASSETS.audioBase + AUDIO.voice;
+        }
+
+        /***********************************
+         * Theme Toggling
+         ***********************************/
+        let currentThemeIndex = 0;
+        const themes = [
+            { name: 'Pink Love', bodyClass: '', hearts: true, buttonText: 'Theme: Pink Love 💖' },
+            { name: 'Blue', bodyClass: 'blue-theme', hearts: false, buttonText: 'Theme: Blue 💙' },
+            { name: 'Yellow', bodyClass: 'yellow-theme', hearts: false, buttonText: 'Theme: Yellow 💛' },
+            { name: 'Green', bodyClass: 'green-theme', hearts: false, buttonText: 'Theme: Green 💚' }
+        ];
+
+        function setTheme(index) {
+            const theme = themes[index];
+            document.body.className = theme.bodyClass;
+            $('#theme-toggle-btn').textContent = theme.buttonText;
+            heartsOn = theme.hearts;
+            localStorage.setItem(LS_KEYS.THEME, index);
+            
+            // Re-apply background for default theme to ensure gradients
+            if (theme.bodyClass === '') {
+                document.body.style.backgroundImage = 'radial-gradient(1200px 800px at 10% -10%, #ffe6f3 0%, transparent 40%), radial-gradient(1000px 700px at 110% 0%, #e6fff6 0%, transparent 40%)';
+            } else {
+                document.body.style.backgroundImage = ''; // Clear for themes that define their own background
+            }
+        }
+
+        function toggleTheme() {
+            currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+            setTheme(currentThemeIndex);
+        }
+
+        /***********************************
+         * Tiny confetti (no deps)
+         ***********************************/
+        function confetti() {
+            for (let i = 0; i < 80; i++) {
+                const s = document.createElement('span');
+                s.className = 'heart';
+                s.textContent = ['🎉', '✨', '💖'][Math.floor(Math.random() * 3)];
+                s.style.left = Math.random() * 100 + 'vw';
+                s.style.bottom = '-10px';
+                s.style.animationDuration = (3 + Math.random() * 2) + 's';
+                document.body.appendChild(s);
+                setTimeout(() => s.remove(), 5000);
+            }
+        }
+
+        /***********************************
+         * Events & Init
+         ***********************************/
+        // Tabs
+        $('#nav').addEventListener('click', (e) => {
+            if (e.target.classList.contains('tab')) {
+                showSection(e.target.dataset.target);
+            }
+        });
+
+        // Moods
+        $$('#why .mood').forEach(b => b.addEventListener('click', () => hugByMood(b.dataset.mood)));
+
+        // Random + Quick
+        $('#random-btn').addEventListener('click', randomHug);
+        $('#quick-hug').addEventListener('click', quickHug);
+
+        // Secret
+        $('#secret-btn').addEventListener('click', secretUnlock);
+        $('#secret-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') secretUnlock();
+        });
+
+        // Music toggle
+        $('#music-toggle').addEventListener('click', toggleMusic);
+        $('#music-skip').addEventListener('click', skipMusic);
+
+        // Compliment & Countdown & Theme toggle
+        $('#compliment-btn').addEventListener('click', getCompliment);
+        $('#theme-toggle-btn').addEventListener('click', toggleTheme);
+
+        // First render
+        renderStreaks();
+        const savedThemeIndex = localStorage.getItem(LS_KEYS.THEME);
+        if (savedThemeIndex !== null) {
+            currentThemeIndex = Number(savedThemeIndex)
+        }
+        setTheme(currentThemeIndex);
+
+        if (location.hash) showSection(location.hash.slice(1));
+        else showSection('home');
+
+        // If secret was previously unlocked, keep it visible when opening the section
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible' && localStorage.getItem(LS_KEYS.SECRET) === '1') {
+                const box = $('#secret-content');
+                if (box && box.style.display === 'none') {
+                    box.style.display = 'grid';
+                    box.innerHTML = SECRET.content;
+                }
+            }
+        });
+
+        // Accessibility: allow hash navigation like #photos
+        window.addEventListener('hashchange', () => {
+            const id = location.hash.substring(1);
+            if (id && $(`#${id}`)) {
+                showSection(id);
+            } else {
+                showSection('home');
+            }
+        });
+    </script>
+</body>
+</html>
