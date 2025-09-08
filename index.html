@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,7 +8,7 @@
     <style>
         :root {
             /* Default Pink Love theme (light baby pink) */
-            --bg: #ffe0ef; /* Light baby pink */
+            --bg: #ffe0ef;
             --panel: #ffffff;
             --accent: #ff7eb6;
             --accent-2: #ffb3d1;
@@ -356,12 +355,12 @@
         
         /* Blue Theme (Light Cyan) */
         body.blue-theme {
-            --bg: #cfe9ed; /* Slightly darker light cyan */
-            --panel: rgba(199, 230, 236, .92); /* Increased opacity for panel */
-            --accent: #4dd0e1; /* Cyan */
-            --accent-2: #80deea; /* Lighter Cyan */
-            --ink: #263238; /* Dark Grey Blue */
-            --muted: #546e7a; /* Grey Blue */
+            --bg: #cfe9ed;
+            --panel: rgba(199, 230, 236, .92);
+            --accent: #4dd0e1;
+            --accent-2: #80deea;
+            --ink: #263238;
+            --muted: #546e7a;
             --shadow: 0 10px 25px rgba(0, 0, 0, .15);
             background: radial-gradient(1200px 800px at 10% -10%, #d8edf1 0%, transparent 40%),
                         radial-gradient(1000px 700px at 110% 0%, #d8f1e0 0%, transparent 40%),
@@ -369,7 +368,7 @@
         }
 
         body.blue-theme header {
-            background: rgba(199, 230, 236, .85); /* Increased opacity for header */
+            background: rgba(199, 230, 236, .85);
             border-color: #b2ebf2;
         }
 
@@ -394,7 +393,7 @@
         }
 
         body.blue-theme .polaroid {
-            background: rgba(178, 235, 242, .9); /* Increased opacity for polaroids */
+            background: rgba(178, 235, 242, .9);
             box-shadow: 0 10px 30px rgba(0, 0, 0, .2);
         }
 
@@ -420,12 +419,12 @@
 
         /* Yellow Theme */
         body.yellow-theme {
-            --bg: #FFD700; /* Gold Yellow */
-            --panel: rgba(255, 236, 179, .85); /* Lighter Creamy Yellow with opacity */
-            --accent: #FFA000; /* Dark Orange */
-            --accent-2: #FFCA28; /* Amber Yellow */
-            --ink: #3E2723; /* Dark Brown */
-            --muted: #795548; /* Medium Brown */
+            --bg: #FFD700;
+            --panel: rgba(255, 236, 179, .85);
+            --accent: #FFA000;
+            --accent-2: #FFCA28;
+            --ink: #3E2723;
+            --muted: #795548;
             --shadow: 0 10px 25px rgba(0, 0, 0, .15);
             background: radial-gradient(1200px 800px at 10% -10%, #fff9e6 0%, transparent 40%),
                         radial-gradient(1000px 700px at 110% 0%, #fff9e0 0%, transparent 40%),
@@ -484,12 +483,12 @@
 
         /* Green Theme */
         body.green-theme {
-            --bg: #e0efe0; /* Slightly darker light green */
-            --panel: rgba(224, 239, 224, .92); /* Increased opacity for panel */
-            --accent: #66bb6a; /* Green */
-            --accent-2: #81c784; /* Lighter Green */
-            --ink: #2e7d32; /* Dark Green */
-            --muted: #4caf50; /* Medium Green */
+            --bg: #e0efe0;
+            --panel: rgba(224, 239, 224, .92);
+            --accent: #66bb6a;
+            --accent-2: #81c784;
+            --ink: #2e7d32;
+            --muted: #4caf50;
             --shadow: 0 10px 25px rgba(0, 0, 0, .12);
             background: radial-gradient(1200px 800px at 10% -10%, #e6f3e6 0%, transparent 40%),
                         radial-gradient(1000px 700px at 110% 0%, #e6f3e0 0%, transparent 40%),
@@ -497,7 +496,7 @@
         }
 
         body.green-theme header {
-            background: rgba(224, 239, 224, .85); /* Increased opacity for header */
+            background: rgba(224, 239, 224, .85);
             border-color: #a5d6a7;
         }
 
@@ -522,7 +521,7 @@
         }
 
         body.green-theme .polaroid {
-            background: rgba(165, 214, 167, .9); /* Increased opacity for polaroids */
+            background: rgba(165, 214, 167, .9);
             box-shadow: 0 10px 30px rgba(0, 0, 0, .15);
         }
 
@@ -564,7 +563,6 @@
                 <button class="tab" data-target="secret">Secret Code</button>
                 <button class="tab" data-target="voice">Voice Hug</button>
                 <button class="tab" data-target="special">Special Days</button>
-                <button class="tab" data-target="compliments">Compliment Jar</button>
                 <button class="tab" data-target="countdown">Countdown</button>
             </nav>
         </div>
@@ -609,8 +607,7 @@
 
         <section id="photos" class="panel">
             <h1>Our Polaroid Wall 📷</h1>
-    <!--        <p class="meta">(Replace these images with your own in <code>assets/images</code> and update captions in the JS data.)</p> -->
-            <div id="polaroids" class="polaroids"></div>
+    <div id="polaroids" class="polaroids"></div>
         </section>
 
         <section id="onthisday" class="panel">
@@ -668,8 +665,7 @@
         <section id="special" class="panel">
             <h1>Special Day Surprise 🎉</h1>
             <div id="special-box" class="hug-card"></div>
- <!--           <p class="tip">Configure your birthday/anniversary dates in the JS data ✨</p> -->
-        </section>
+ </section>
 
         <section id="compliments" class="panel">
             <h1>Jar of Compliments 💌</h1>
@@ -692,6 +688,7 @@
     <footer class="player" aria-label="background music controls">
         <button class="btn secondary" id="music-toggle">Play music 🎵</button>
         <span id="music-status" class="meta muted">soft piano ready</span>
+        <button class="btn secondary" id="music-prev">Prev ⏪</button>
         <button class="btn secondary" id="music-skip">Skip ⏭️</button>
     </footer>
 
@@ -704,7 +701,6 @@
             imagesBase: "assets/images/",
             audioBase: "assets/audios/"
         };
-
         // Mood-based hug packs
         const HUGS = {
             sad: {
@@ -765,7 +761,7 @@
             
         }, {
             src: 'pic3.jpg',
-            
+ 
         }, {
             src: 'pic4.jpg',
             
@@ -785,7 +781,6 @@
             date: '09-06',
             text: 'Coding the Hug Dispenser together 😍'
         }];
-
         // Quotes (used here instead of an external API for simplicity)
         const QUOTES = [
             '"I love you" means that I will love you and stand by you even through the worst of times. — Unknown',
@@ -793,7 +788,6 @@
             'In a sea of people, my eyes will always search for you. — Unknown',
             'You are my today and all of my tomorrows. — Lee'
         ];
-
         // Secret codes → special content
         const SECRET = {
             validCodes: ['pookie', 'ourspecialword', '22'],
@@ -804,7 +798,6 @@
             `,
             hint: 'Hint: Our inside joke. All lowercase. 😉'
         };
-
         // Special days (MM-DD)
         const SPECIAL = {
             '10-03': {
@@ -835,7 +828,6 @@
             ],
             voice: 'voicehug.mp3'
         };
-
         // Compliments
         const COMPLIMENTS = [
             "You're the cutest human alive.",
@@ -856,7 +848,6 @@
             name: 'Next time we meet',
             date: '2025-10-03'
         }];
-
         /***********************************
          * Utilities
          ***********************************/
@@ -906,7 +897,6 @@
          * Hearts animation
          ***********************************/
         let heartsOn = true;
-
         function burstHearts() {
             if (!heartsOn) return;
             const container = $('#hearts');
@@ -932,7 +922,6 @@
             SECRET: 'hug:secret',
             THEME: 'hug:theme'
         };
-
         function isConsecutiveDay(prevStr, curr) {
             const prev = new Date(prevStr);
             const diff = curr - prev; // ms
@@ -949,7 +938,7 @@
             } else {
                 const lastDate = new Date(last);
                 if (isConsecutiveDay(lastDate, now)) streak += 1;
-                else if (lastDate.toDateString() !== now.toDateString()) streak = 1; // break
+                else if (lastDate.toDateString() !== now.toDateString()) streak = 1;
             }
             localStorage.setItem(LS_KEYS.STREAK, String(streak));
             localStorage.setItem(LS_KEYS.LAST, now.toISOString());
@@ -958,7 +947,6 @@
         function bumpHugCounters() {
             const count = Number(localStorage.getItem(LS_KEYS.COUNT) || 0) + 1;
             localStorage.setItem(LS_KEYS.COUNT, String(count));
-            // Also mark a visit for streak on hug
             bumpVisit();
             renderStreaks();
         }
@@ -990,13 +978,12 @@
             $('#quick-hug-result').innerHTML = `<div class="meta">${msg}</div>`;
             burstHearts();
             bumpHugCounters();
-            // Also preview gif inline under the text
             $('#quick-hug-result').insertAdjacentHTML('beforeend', `<div class="spacer"></div><img src="${ASSETS.gifsBase + gif}" alt="hug gif" style="max-width:220px;border-radius:14px">`);
         }
 
         function initPolaroids() {
             const wall = $('#polaroids');
-            if (wall.dataset.rendered) return; // render once
+            if (wall.dataset.rendered) return;
             wall.dataset.rendered = '1';
             POLAROIDS.forEach((p, i) => {
                 const d = document.createElement('div');
@@ -1053,7 +1040,7 @@
             <div class="meta">${s.text}</div>
             <img src="${ASSETS.gifsBase + pick(GENERAL_HUGS.gifs)}" alt="gif" />
             `;
-                if (s.confetti) confetti();
+            if (s.confetti) confetti();
             } else {
                 box.innerHTML = `
             <div class="meta">No special surprise today… but every day with you is special 💗</div>
@@ -1076,7 +1063,6 @@
             COUNTDOWNS.forEach(cd => {
                 const now = new Date();
                 let target = new Date(cd.date);
-                // If the target date is in the past, calculate for next year
                 if (target.getTime() < now.getTime() && (cd.date.includes('-') && !cd.date.includes(':'))) {
                     target.setFullYear(now.getFullYear() + 1);
                 }
@@ -1097,7 +1083,6 @@
             });
         }
         let countdownInterval = null;
-
         function startCountdowns() {
             if (countdownInterval) clearInterval(countdownInterval);
             renderCountdowns();
@@ -1114,7 +1099,7 @@
         function ensureBg() {
             if (!bgAudio) {
                 bgAudio = new Audio();
-                bgAudio.loop = true;
+                bgAudio.loop = false;
                 bgAudio.addEventListener('ended', () => {
                     skipMusic();
                 });
@@ -1124,7 +1109,10 @@
 
         function playMusic() {
             const a = ensureBg();
-            a.src = ASSETS.audioBase + AUDIO.bg[currentTrack];
+            // Only set src if it's the first time playing or a new track is selected
+            if (!a.src || a.ended) {
+                a.src = ASSETS.audioBase + AUDIO.bg[currentTrack];
+            }
             a.play();
             musicPlaying = true;
             $('#music-status').textContent = `playing: ${AUDIO.bg[currentTrack].replace('.mp3','')}`;
@@ -1149,9 +1137,26 @@
 
         function skipMusic() {
             currentTrack = (currentTrack + 1) % AUDIO.bg.length;
-            if (musicPlaying) playMusic();
+            if (bgAudio) {
+                bgAudio.src = ASSETS.audioBase + AUDIO.bg[currentTrack];
+                bgAudio.play();
+                musicPlaying = true;
+                $('#music-status').textContent = `playing: ${AUDIO.bg[currentTrack].replace('.mp3','')}`;
+                $('#music-toggle').textContent = 'Pause music ⏸️';
+            }
         }
 
+        function prevMusic() {
+            currentTrack = (currentTrack - 1 + AUDIO.bg.length) % AUDIO.bg.length;
+            if (bgAudio) {
+                bgAudio.src = ASSETS.audioBase + AUDIO.bg[currentTrack];
+                bgAudio.play();
+                musicPlaying = true;
+                $('#music-status').textContent = `playing: ${AUDIO.bg[currentTrack].replace('.mp3','')}`;
+                $('#music-toggle').textContent = 'Pause music ⏸️';
+            }
+        }
+        
         function initVoice() {
             const el = $('#voice-audio');
             if (!el.src) el.src = ASSETS.audioBase + AUDIO.voice;
@@ -1174,12 +1179,10 @@
             $('#theme-toggle-btn').textContent = theme.buttonText;
             heartsOn = theme.hearts;
             localStorage.setItem(LS_KEYS.THEME, index);
-            
-            // Re-apply background for default theme to ensure gradients
             if (theme.bodyClass === '') {
                 document.body.style.backgroundImage = 'radial-gradient(1200px 800px at 10% -10%, #ffe6f3 0%, transparent 40%), radial-gradient(1000px 700px at 110% 0%, #e6fff6 0%, transparent 40%)';
             } else {
-                document.body.style.backgroundImage = ''; // Clear for themes that define their own background
+                document.body.style.backgroundImage = '';
             }
         }
 
@@ -1216,25 +1219,21 @@
 
         // Moods
         $$('#why .mood').forEach(b => b.addEventListener('click', () => hugByMood(b.dataset.mood)));
-
         // Random + Quick
         $('#random-btn').addEventListener('click', randomHug);
         $('#quick-hug').addEventListener('click', quickHug);
-
         // Secret
         $('#secret-btn').addEventListener('click', secretUnlock);
         $('#secret-input').addEventListener('keypress', (e) => {
             if (e.key === 'Enter') secretUnlock();
         });
-
         // Music toggle
         $('#music-toggle').addEventListener('click', toggleMusic);
         $('#music-skip').addEventListener('click', skipMusic);
-
+        $('#music-prev').addEventListener('click', prevMusic);
         // Compliment & Countdown & Theme toggle
         $('#compliment-btn').addEventListener('click', getCompliment);
         $('#theme-toggle-btn').addEventListener('click', toggleTheme);
-
         // First render
         renderStreaks();
         const savedThemeIndex = localStorage.getItem(LS_KEYS.THEME);
@@ -1242,7 +1241,6 @@
             currentThemeIndex = Number(savedThemeIndex)
         }
         setTheme(currentThemeIndex);
-
         if (location.hash) showSection(location.hash.slice(1));
         else showSection('home');
 
