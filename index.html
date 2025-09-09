@@ -1103,39 +1103,9 @@
             musicStatusEl.textContent = status;
         }
 
-   /*     function loadAndPlayTrack() {
-            const trackPath = AUDIO.bg[currentTrackIndex];
-            audioElement.src = ASSETS.audioBase + trackPath;
-            audioElement.currentTime = lastPlayedTime;
-            audioElement.play().then(() => {
-                isPlaying = true;
-                musicToggleBtn.textContent = 'Pause music ⏸️';
-                updateMusicStatus(`Playing: ${trackPath.split('/').pop().replace('.mp3', '')}`);
-            }).catch(e => {
-                console.error('Error playing audio:', e);
-                updateMusicStatus('Playback failed 😢');
-            });
-        } */
-        
         function loadAndPlayTrack() {
             const trackPath = AUDIO.bg[currentTrackIndex];
             audioElement.src = ASSETS.audioBase + trackPath;
-
-    // Check if the audio is already loaded and ready to play
-    if (audioElement.readyState >= 2) {
-        audioElement.currentTime = lastPlayedTime;
-        audioElement.play().then(() => {
-            isPlaying = true;
-            musicToggleBtn.textContent = 'Pause music ⏸️';
-            updateMusicStatus(`Playing: ${trackPath.split('/').pop().replace('.mp3', '')}`);
-        }).catch(e => {
-            console.error('Error playing audio:', e);
-            updateMusicStatus('Playback failed 😢');
-        });
-    } else {
-        // If not ready, wait for it to be loaded before trying to play
-        audioElement.addEventListener('canplaythrough', function onCanPlay() {
-            audioElement.removeEventListener('canplaythrough', onCanPlay);
             audioElement.currentTime = lastPlayedTime;
             audioElement.play().then(() => {
                 isPlaying = true;
@@ -1145,10 +1115,9 @@
                 console.error('Error playing audio:', e);
                 updateMusicStatus('Playback failed 😢');
             });
-        });
-    }
-}
-
+        } 
+        
+        
         function toggleMusic() {
             if (isPlaying) {
                 lastPlayedTime = audioElement.currentTime;
