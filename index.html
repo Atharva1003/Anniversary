@@ -607,7 +607,7 @@
 
         <section id="photos" class="panel">
             <h1>Our Polaroid Wall 📷</h1>
-            <div id="polaroids" class="polaroids"></div>
+    <div id="polaroids" class="polaroids"></div>
         </section>
 
         <section id="onthisday" class="panel">
@@ -761,7 +761,7 @@
             
         }, {
             src: 'pic3.jpg',
- 
+            
         }, {
             src: 'pic4.jpg',
             
@@ -828,6 +828,7 @@
             ],
             voice: 'voicehug.mp3'
         };
+
         // Compliments
         const COMPLIMENTS = [
             "You're the cutest human alive.",
@@ -836,7 +837,6 @@
             "Your smile is my favorite thing.",
             "I love you more than words can say."
         ];
-
         // Countdowns
         const COUNTDOWNS = [{
             name: 'Your Birthday',
@@ -897,6 +897,7 @@
          * Hearts animation
          ***********************************/
         let heartsOn = true;
+
         function burstHearts() {
             if (!heartsOn) return;
             const container = $('#hearts');
@@ -922,9 +923,11 @@
             SECRET: 'hug:secret',
             THEME: 'hug:theme'
         };
+
         function isConsecutiveDay(prevStr, curr) {
             const prev = new Date(prevStr);
-            const diff = curr - prev; // ms
+            const diff = curr - prev;
+            // ms
             const days = diff / (1000 * 60 * 60 * 24);
             return days > 0.5 && days < 1.5; // allow time drift
         }
@@ -1048,14 +1051,12 @@
             `;
             }
         }
-
         // Compliments
         function getCompliment() {
             const result = $('#compliment-result');
             result.textContent = pick(COMPLIMENTS);
             burstHearts();
         }
-
         // Countdowns
         function renderCountdowns() {
             const container = $('#countdown-list');
@@ -1071,7 +1072,6 @@
                 const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
                 const item = document.createElement('div');
                 item.className = 'pill';
                 if (diff > 0) {
@@ -1083,6 +1083,7 @@
             });
         }
         let countdownInterval = null;
+
         function startCountdowns() {
             if (countdownInterval) clearInterval(countdownInterval);
             renderCountdowns();
@@ -1090,14 +1091,17 @@
         }
 
         /***********************************
-         * Audio
+         * Audio player logic
          ***********************************/
-        const musicStatusEl = $('#music-status');
-        const musicToggleBtn = $('#music-toggle');
         const audioElement = new Audio();
         let isPlaying = false;
-        let currentTrackIndex = Math.floor(Math.random() * AUDIO.bg.length);
         let lastPlayedTime = 0;
+        let currentTrackIndex = 0;
+
+        const musicToggleBtn = $('#music-toggle');
+        const musicPrevBtn = $('#music-prev');
+        const musicSkipBtn = $('#music-skip');
+        const musicStatusEl = $('#music-status');
 
         function updateMusicStatus(status) {
             musicStatusEl.textContent = status;
@@ -1106,120 +1110,227 @@
         function loadAndPlayTrack() {
             const trackPath = AUDIO.bg[currentTrackIndex];
             audioElement.src = ASSETS.audioBase + trackPath;
-            audioElement.currentTime = lastPlayedTime;
-            audioElement.play().then(() => {
-                isPlaying = true;
-                musicToggleBtn.textContent = 'Pause music ⏸️';
-                updateMusicStatus(`Playing: ${trackPath.split('/').pop().replace('.mp3', '')}`);
-            }).catch(e => {
-                console.error('Error playing audio:', e);
-                updateMusicStatus('Playback failed 😢');
+
+            // Wait for audio to be ready before playing to avoid DOMException
+            audioElement.addEventListener('canplaythrough', function onCanPlay() {
+                audioElement.removeEventListener('canplaythrough', onCanPlay);
+                audioElement.currentTime = lastPlayedTime;
+                audioElement.play().then(() => {
+                    isPlaying = true;
+                    musicToggleBtn.textContent = 'Pause music ⏸️';
+                    updateMusicStatus(`Playing: ${trackPath.split('/').pop().replace('.mp3', '')}`);
+                }).catch(e => {
+                    console.error('Error playing audio:', e);
+                    updateMusicStatus('Playback failed 😢');
+                });
             });
-        } 
-        
-        
+        }
+
         function toggleMusic() {
             if (isPlaying) {
                 lastPlayedTime = audioElement.currentTime;
                 audioElement.pause();
                 isPlaying = false;
                 musicToggleBtn.textContent = 'Play music 🎵';
-                updateMusicStatus('Paused');
+                updateMusicStatus('paused');
             } else {
+                audioElement.src = ASSETS.audioBase + AUDIO.bg[currentTrackIndex];
                 loadAndPlayTrack();
             }
         }
 
         function prevMusic() {
             currentTrackIndex = (currentTrackIndex - 1 + AUDIO.bg.length) % AUDIO.bg.length;
-            lastPlayedTime = 0;
             loadAndPlayTrack();
         }
 
         function skipMusic() {
             currentTrackIndex = (currentTrackIndex + 1) % AUDIO.bg.length;
-            lastPlayedTime = 0;
             loadAndPlayTrack();
         }
-        
-        function initVoice() {
-            const el = $('#voice-audio');
-            if (!el.src) el.src = ASSETS.audioBase + AUDIO.voice;
-        }
+
+        // Event listeners for music player
+        musicToggleBtn.addEventListener('click', toggleMusic);
+        musicSkipBtn.addEventListener('click', skipMusic);
+        musicPrevBtn.addEventListener('click', prevMusic);
+
+        // Loop the music once it ends
+        audioElement.addEventListener('ended', skipMusic);
 
         /***********************************
-         * Theme Toggling
+         * Misc & Initialization
          ***********************************/
-        let currentThemeIndex = 0;
-        const themes = [
-            { name: 'Pink Love', bodyClass: '', hearts: true, buttonText: 'Theme: Pink Love 💖' },
-            { name: 'Blue', bodyClass: 'blue-theme', hearts: false, buttonText: 'Theme: Blue 💙' },
-            { name: 'Yellow', bodyClass: 'yellow-theme', hearts: false, buttonText: 'Theme: Yellow 💛' },
-            { name: 'Green', bodyClass: 'green-theme', hearts: false, buttonText: 'Theme: Green 💚' }
-        ];
 
-        function setTheme(index) {
-            const theme = themes[index];
-            document.body.className = theme.bodyClass;
-            $('#theme-toggle-btn').textContent = theme.buttonText;
-            heartsOn = theme.hearts;
-            localStorage.setItem(LS_KEYS.THEME, index);
-            if (theme.bodyClass === '') {
-                document.body.style.backgroundImage = 'radial-gradient(1200px 800px at 10% -10%, #ffe6f3 0%, transparent 40%), radial-gradient(1000px 700px at 110% 0%, #e6fff6 0%, transparent 40%)';
-            } else {
-                document.body.style.backgroundImage = '';
-            }
+        // Voice hug
+        function initVoice() {
+            const voiceAudio = $('#voice-audio');
+            voiceAudio.src = ASSETS.audioBase + AUDIO.voice;
         }
 
+        // Theme switching
+        const THEMES = ['pink-love', 'blue-theme', 'yellow-theme', 'green-theme'];
+        let currentThemeIndex = 0;
+
         function toggleTheme() {
-            currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+            currentThemeIndex = (currentThemeIndex + 1) % THEMES.length;
             setTheme(currentThemeIndex);
         }
 
-        /***********************************
-         * Tiny confetti (no deps)
-         ***********************************/
-        function confetti() {
-            for (let i = 0; i < 80; i++) {
-                const s = document.createElement('span');
-                s.className = 'heart';
-                s.textContent = ['🎉', '✨', '💖'][Math.floor(Math.random() * 3)];
-                s.style.left = Math.random() * 100 + 'vw';
-                s.style.bottom = '-10px';
-                s.style.animationDuration = (3 + Math.random() * 2) + 's';
-                document.body.appendChild(s);
-                setTimeout(() => s.remove(), 5000);
-            }
+        function setTheme(index) {
+            document.body.className = '';
+            document.body.classList.add(THEMES[index]);
+            $('#theme-toggle-btn').textContent = `Theme: ${THEMES[index].replace('-', ' ')} ✨`;
+            localStorage.setItem(LS_KEYS.THEME, String(index));
+            heartsOn = THEMES[index] === 'pink-love';
         }
 
-        /***********************************
-         * Events & Init
-         ***********************************/
-        // Tabs
-        $('#nav').addEventListener('click', (e) => {
-            if (e.target.classList.contains('tab')) {
-                showSection(e.target.dataset.target);
+        // Confetti effect (from confetti.js)
+        function confetti() {
+            (function () {
+                var T = window.T || {};
+                var E = (T.confetti = T.confetti || {});
+                (function () {
+                    var s = window.confetti || E;
+                    if (s.reset) return;
+                    var C = -1,
+                        y = [],
+                        M = 'undefined',
+                        n = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function (e) {
+                            return window.setTimeout(e, 1000 / 60)
+                        },
+                        b = [],
+                        x = {},
+                        l = 0,
+                        a = !1,
+                        c = Math.random,
+                        r = Math.sin,
+                        i = Math.cos,
+                        u = Math.floor,
+                        p = Math.max,
+                        v = Math.min,
+                        h = !0,
+                        f = window.document,
+                        g = f.createElement('canvas'),
+                        d = f.createElement('canvas'),
+                        m = g.getContext('2d'),
+                        w = d.getContext('2d'),
+                        o = window.devicePixelRatio || 1,
+                        S = 300,
+                        I = 200,
+                        k = 20,
+                        E = 10,
+                        O = 10,
+                        L = 200,
+                        A = [
+                            [30, 0, '#e84118'],
+                            [25, 0, '#e84118'],
+                            [20, 0, '#e84118']
+                        ],
+                        N = {
+                            x: .5,
+                            y: .5
+                        },
+                        P = {
+                            h: 0,
+                            s: 0,
+                            l: 0
+                        },
+                        F = {},
+                        j = function (e) {
+                            return 10 * Math.atan(e)
+                        },
+                        z = function (e) {
+                            return e
+                        },
+                        T = function (e, t, o) {
+                            return function (e, t, o) {
+                                return e + (t - e) * o
+                            }(e, t, 1 - Math.cos(o * Math.PI) / 2)
+                        },
+                        R = function (e, t) {
+                            var o = e.g,
+                                n = e.g,
+                                a = {
+                                    x: 0,
+                                    y: 0,
+                                    x: 0,
+                                    y: 0
+                                };
+                            o.x = n.x = t.x, o.y = n.y = t.y, e.m = 100, e.o = 0, e.d = 0, a.x = R.x(e.m), a.y = R.y(e.m), e.g = {
+                                x: e.g.x,
+                                y: e.g.y
+                            }, e.g = a, e.g.x += e.g.x, e.g.y += e.g.y
+                        };
+                    s.reset = function () {
+                        s.empty(), s.add()
+                    }, s.add = function (e) {
+                        for (var t = 0; t < e; t++) {
+                            var o = {
+                                g: {
+                                    x: c() * S,
+                                    y: c() * I
+                                }
+                            };
+                            R(o, {
+                                x: c(),
+                                y: c()
+                            }), y.push(o)
+                        }
+                    }, s.start = function () {
+                        if (a) return;
+                        a = !0;
+                        var e = function (t) {
+                            l = t, s.update()
+                        };
+                        n(e)
+                    }, s.update = function () {
+                        for (var e = 0; e < y.length; e++) {
+                            var t = y[e];
+                            if (t.m <= 0) {
+                                y.splice(e, 1);
+                                continue
+                            }
+                            var o = t.m / 100;
+                            t.d += t.o / o, t.o += (t.g.y - t.g.y) * o, t.g.x += t.g.x, t.g.y += t.g.y, t.m = p(0, t.m - 1), t.o = v(t.o, L)
+                        }
+                        f.clearRect(0, 0, g.width, g.height), w.clearRect(0, 0, d.width, d.height), m.save(), w.save(), m.translate(.5, .5), w.translate(.5, .5);
+                        for (var n = 0; n < b.length; n++) {
+                            var a = b[n];
+                            m.beginPath(), m.arc(a.x, a.y, a.r, 0, 2 * Math.PI, !1), m.fillStyle = a.c, m.fill(), m.closePath(), a.a -= .01, a.o -= .02, a.y += a.s, a.a <= 0 && b.splice(n, 1)
+                        }
+                        m.restore(), w.restore(), n(s.update)
+                    }
+                })(),
+                function (e, t) {
+                    var o = t.h,
+                        n = t.s,
+                        a = t.l,
+                        c = t.a;
+                    return (o = (o = (o += Math.random() * e.g - e.g / 2) > 360 ? 360 : o) < 0 ? 0 : o), 'hsla(' + o + ',' + (n += Math.random() * e.s - e.s / 2) + '%,' + (a += Math.random() * e.l - e.l / 2) + '%,' + c + ')'
+                }(P, F);
+                var Y = {
+                    x: .5,
+                    y: .5
+                };
+                return E
+            })();
+        }
+
+        // Event listeners
+        $('#nav').addEventListener('click', e => {
+            const btn = e.target.closest('.tab');
+            if (btn) {
+                showSection(btn.dataset.target);
             }
         });
 
-        // Moods
-        $$('#why .mood').forEach(b => b.addEventListener('click', () => hugByMood(b.dataset.mood)));
-        // Random + Quick
-        $('#random-btn').addEventListener('click', randomHug);
         $('#quick-hug').addEventListener('click', quickHug);
-        // Secret
+        $$('.mood').forEach(b => b.addEventListener('click', e => hugByMood(e.target.dataset.mood)));
+        $('#random-btn').addEventListener('click', randomHug);
         $('#secret-btn').addEventListener('click', secretUnlock);
-        $('#secret-input').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') secretUnlock();
-        });
-        // Music toggle
-        audioElement.addEventListener('ended', skipMusic);
-        musicToggleBtn.addEventListener('click', toggleMusic);
-        $('#music-skip').addEventListener('click', skipMusic);
-        $('#music-prev').addEventListener('click', prevMusic);
-        // Compliment & Countdown & Theme toggle
         $('#compliment-btn').addEventListener('click', getCompliment);
         $('#theme-toggle-btn').addEventListener('click', toggleTheme);
+
         // First render
         renderStreaks();
         const savedThemeIndex = localStorage.getItem(LS_KEYS.THEME);
@@ -1227,6 +1338,7 @@
             currentThemeIndex = Number(savedThemeIndex)
         }
         setTheme(currentThemeIndex);
+
         if (location.hash) showSection(location.hash.slice(1));
         else showSection('home');
 
