@@ -32,8 +32,8 @@
             margin: 0;
             font-family: ui-rounded, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", "Comic Sans MS", sans-serif;
             background: radial-gradient(1200px 800px at 10% -10%, #ffe6f3 0%, transparent 40%),
-                radial-gradient(1000px 700px at 110% 0%, #e6fff6 0%, transparent 40%),
-                var(--bg);
+                        radial-gradient(1000px 700px at 110% 0%, #e6fff6 0%, transparent 40%),
+                        var(--bg);
             color: var(--ink);
             transition: all .6s ease;
             background-size: cover;
@@ -607,7 +607,7 @@
 
         <section id="photos" class="panel">
             <h1>Our Polaroid Wall 📷</h1>
-    <div id="polaroids" class="polaroids"></div>
+            <div id="polaroids" class="polaroids"></div>
         </section>
 
         <section id="onthisday" class="panel">
@@ -665,7 +665,7 @@
         <section id="special" class="panel">
             <h1>Special Day Surprise 🎉</h1>
             <div id="special-box" class="hug-card"></div>
- </section>
+        </section>
 
         <section id="compliments" class="panel">
             <h1>Jar of Compliments 💌</h1>
@@ -818,15 +818,15 @@
         // Audio
         const AUDIO = {
             bg: [
-                'bgmusic1.mp3',
-                'bgmusic2.mp3',
-                'bgmusic3.mp3',
-                'bgmusic4.mp3',
-                'bgmusic5.mp3',
-                'bgmusic6.mp3',
-                'bgmusic7.mp3'
+                'audios/bgmusic1.mp3',
+                'audios/bgmusic2.mp3',
+                'audios/bgmusic3.mp3',
+                'audios/bgmusic4.mp3',
+                'audios/bgmusic5.mp3',
+                'audios/bgmusic6.mp3',
+                'audios/bgmusic7.mp3'
             ],
-            voice: 'voicehug.mp3'
+            voice: 'audios/voicehug.mp3'
         };
         // Compliments
         const COMPLIMENTS = [
@@ -1040,7 +1040,7 @@
             <div class="meta">${s.text}</div>
             <img src="${ASSETS.gifsBase + pick(GENERAL_HUGS.gifs)}" alt="gif" />
             `;
-            if (s.confetti) confetti();
+                if (s.confetti) confetti();
             } else {
                 box.innerHTML = `
             <div class="meta">No special surprise today… but every day with you is special 💗</div>
@@ -1092,69 +1092,53 @@
         /***********************************
          * Audio
          ***********************************/
-        let bgAudio;
-        let musicPlaying = false;
-        let currentTrack = 0;
+        const musicStatusEl = $('#music-status');
+        const musicToggleBtn = $('#music-toggle');
+        const audioElement = new Audio();
+        let isPlaying = false;
+        let currentTrackIndex = Math.floor(Math.random() * AUDIO.bg.length);
+        let lastPlayedTime = 0;
 
-        function ensureBg() {
-            if (!bgAudio) {
-                bgAudio = new Audio();
-                bgAudio.loop = false;
-                bgAudio.addEventListener('ended', () => {
-                    skipMusic();
-                });
-            }
-            return bgAudio;
+        function updateMusicStatus(status) {
+            musicStatusEl.textContent = status;
         }
 
-        function playMusic() {
-            const a = ensureBg();
-            // Only set src if it's the first time playing or a new track is selected
-            if (!a.src || a.ended) {
-                a.src = ASSETS.audioBase + AUDIO.bg[currentTrack];
-            }
-            a.play();
-            musicPlaying = true;
-            $('#music-status').textContent = `playing: ${AUDIO.bg[currentTrack].replace('.mp3','')}`;
-            $('#music-toggle').textContent = 'Pause music ⏸️';
-        }
-
-        function pauseMusic() {
-            const a = ensureBg();
-            a.pause();
-            musicPlaying = false;
-            $('#music-status').textContent = 'paused';
-            $('#music-toggle').textContent = 'Play music 🎵';
+        function loadAndPlayTrack() {
+            const trackPath = AUDIO.bg[currentTrackIndex];
+            audioElement.src = ASSETS.audioBase + trackPath;
+            audioElement.currentTime = lastPlayedTime;
+            audioElement.play().then(() => {
+                isPlaying = true;
+                musicToggleBtn.textContent = 'Pause music ⏸️';
+                updateMusicStatus(`Playing: ${trackPath.split('/').pop().replace('.mp3', '')}`);
+            }).catch(e => {
+                console.error('Error playing audio:', e);
+                updateMusicStatus('Playback failed 😢');
+            });
         }
 
         function toggleMusic() {
-            if (!musicPlaying) {
-                playMusic();
+            if (isPlaying) {
+                lastPlayedTime = audioElement.currentTime;
+                audioElement.pause();
+                isPlaying = false;
+                musicToggleBtn.textContent = 'Play music 🎵';
+                updateMusicStatus('Paused');
             } else {
-                pauseMusic();
-            }
-        }
-
-        function skipMusic() {
-            currentTrack = (currentTrack + 1) % AUDIO.bg.length;
-            if (bgAudio) {
-                bgAudio.src = ASSETS.audioBase + AUDIO.bg[currentTrack];
-                bgAudio.play();
-                musicPlaying = true;
-                $('#music-status').textContent = `playing: ${AUDIO.bg[currentTrack].replace('.mp3','')}`;
-                $('#music-toggle').textContent = 'Pause music ⏸️';
+                loadAndPlayTrack();
             }
         }
 
         function prevMusic() {
-            currentTrack = (currentTrack - 1 + AUDIO.bg.length) % AUDIO.bg.length;
-            if (bgAudio) {
-                bgAudio.src = ASSETS.audioBase + AUDIO.bg[currentTrack];
-                bgAudio.play();
-                musicPlaying = true;
-                $('#music-status').textContent = `playing: ${AUDIO.bg[currentTrack].replace('.mp3','')}`;
-                $('#music-toggle').textContent = 'Pause music ⏸️';
-            }
+            currentTrackIndex = (currentTrackIndex - 1 + AUDIO.bg.length) % AUDIO.bg.length;
+            lastPlayedTime = 0;
+            loadAndPlayTrack();
+        }
+
+        function skipMusic() {
+            currentTrackIndex = (currentTrackIndex + 1) % AUDIO.bg.length;
+            lastPlayedTime = 0;
+            loadAndPlayTrack();
         }
         
         function initVoice() {
@@ -1228,7 +1212,8 @@
             if (e.key === 'Enter') secretUnlock();
         });
         // Music toggle
-        $('#music-toggle').addEventListener('click', toggleMusic);
+        audioElement.addEventListener('ended', skipMusic);
+        musicToggleBtn.addEventListener('click', toggleMusic);
         $('#music-skip').addEventListener('click', skipMusic);
         $('#music-prev').addEventListener('click', prevMusic);
         // Compliment & Countdown & Theme toggle
